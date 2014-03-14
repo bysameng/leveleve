@@ -46,6 +46,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\DeathWall.cs" />
+     <Compile Include="Assets\Fader.cs" />
      <Compile Include="Assets\Scripts\Classes\EventHandler.cs" />
      <Compile Include="Assets\Scripts\Classes\Level.cs" />
      <Compile Include="Assets\Scripts\Classes\LevelStack.cs" />
