@@ -1,13 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Main.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Classes/Level.cs">
     <Files>
-      <File FileName="Assets/Scripts/Input/MouseCursorMover.cs" Line="30" Column="27" />
-      <File FileName="Assets/Scripts/Main.cs" Line="11" Column="27" />
-      <File FileName="Assets/Scripts/Objects/Exit.cs" Line="8" Column="21" />
-      <File FileName="Assets/Scripts/Classes/Level.cs" Line="31" Column="14" />
+      <File FileName="Assets/Scripts/Main.cs" Line="27" Column="22" />
+      <File FileName="Assets/Scripts/Input/MouseCursorMover.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Main.cs" Line="31" Column="1" />
+      <File FileName="Assets/Scripts/Objects/Exit.cs" Line="8" Column="29" />
+      <File FileName="Assets/Scripts/Classes/Level.cs" Line="65" Column="46" />
       <File FileName="Assets/Scripts/Classes/LevelWriter.cs" Line="25" Column="3" />
-      <File FileName="Assets/Scripts/Classes/LevelStack.cs" Line="27" Column="58" />
+      <File FileName="Assets/Scripts/Classes/LevelStack.cs" Line="53" Column="38" />
+      <File FileName="Assets/Scripts/Classes/EventHandler.cs" Line="6" Column="15" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
