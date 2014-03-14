@@ -1,0 +1,17 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Main.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Input/MouseCursorMover.cs" Line="30" Column="27" />
+      <File FileName="Assets/Scripts/Main.cs" Line="11" Column="27" />
+      <File FileName="Assets/Scripts/Objects/Exit.cs" Line="8" Column="21" />
+      <File FileName="Assets/Scripts/Classes/Level.cs" Line="31" Column="14" />
+      <File FileName="Assets/Scripts/Classes/LevelWriter.cs" Line="25" Column="3" />
+      <File FileName="Assets/Scripts/Classes/LevelStack.cs" Line="27" Column="58" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
