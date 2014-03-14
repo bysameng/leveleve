@@ -6,7 +6,12 @@ public class Main : MonoBehaviour {
 
 	private LevelWriter lWriter;
 	private LevelStack lStack;
-	
+
+	public int LevelCount{
+		get;
+		private set;
+	}
+
 	void Awake(){
 		lWriter = GetComponent<LevelWriter>();
 		lStack = GetComponent<LevelStack>();
@@ -18,13 +23,22 @@ public class Main : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void FixedUpdate () {
+		
+	}
+
+	void OnGUI(){
+		GUI.Label(new Rect(0, 0, 100, 100), "" + LevelCount);
 	}
 
 
 	public void NextLevel(){
 		lStack.NextLevel();
+		LevelCount++;
+	}
+
+	public void GenerateNewLevel(Level l){
+		lWriter.GenerateLevel(l);
 	}
 
 }
