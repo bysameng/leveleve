@@ -46,12 +46,12 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\DeathWall.cs" />
-     <Compile Include="Assets\Fader.cs" />
      <Compile Include="Assets\Scripts\Classes\EventHandler.cs" />
      <Compile Include="Assets\Scripts\Classes\Level.cs" />
      <Compile Include="Assets\Scripts\Classes\LevelStack.cs" />
      <Compile Include="Assets\Scripts\Classes\LevelWriter.cs" />
+     <Compile Include="Assets\Scripts\DeathWall.cs" />
+     <Compile Include="Assets\Scripts\Fader.cs" />
      <Compile Include="Assets\Scripts\Input\MouseCursorMover.cs" />
      <Compile Include="Assets\Scripts\Main.cs" />
      <Compile Include="Assets\Scripts\Objects\Exit.cs" />
