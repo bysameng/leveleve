@@ -4,29 +4,33 @@ using System.Collections.Generic;
 
 public class Level : MonoBehaviour{
 
-	private int _sizex;
-	public int sizex{
-		get {return this._sizex;}
-		private set {this._sizex = value;}
+//	private int _sizex;
+	public int SizeX{
+		get;
+		private set;
 	}
-	private int _sizey;
-	public int sizey{
-		get {return this._sizey;}
-		private set {this._sizey = value;}
+//	private int _sizey;
+	public int SizeY{
+		get;
+		private set;
 	}
 
 	protected int[,] grid;
 
 	public List<GameObject> instantiatedObjects;
 
-	void Start(){
-		this.sizex = (int)transform.localScale.x;
-		this.sizey = (int)transform.localScale.y;
-		grid = new int[sizex, sizey];
-		for (int i = 0; i < sizex; i++)
-			for (int j = 0; j < sizey; j++)
-				grid[i, j] = 0;
 
+	private Fader fader;
+
+	public void Init(){
+		SizeX = (int)transform.localScale.x;
+		SizeY = (int)transform.localScale.y;
+		fader = gameObject.AddComponent<Fader>();
+		grid = new int[SizeX, SizeY];
+		for (int i = 0; i < SizeX; i++)
+			for (int j = 0; j < SizeY; j++)
+				grid[i, j] = 0;
+	//	fader.MakeVisible();
 	}
 
 	public void DestroyLevelFade(float seconds){
@@ -38,8 +42,9 @@ public class Level : MonoBehaviour{
 	}
 
 	public void SetPos(int x, int y, int val){
-		if (x < 0 || x >= sizex || y < 0 || y >= sizey){
+		if (x < 0 || x >= SizeX || y < 0 || y >= SizeY){
 			Debug.LogError("Error, out of range for Level.SetPos()");
+			Debug.Log (SizeX);
 			return;
 		}
 		grid[x, y] = val;
@@ -53,23 +58,14 @@ public class Level : MonoBehaviour{
 
 
 	IEnumerator Fader(float seconds){
-		instantiatedObjects.Add(this.gameObject);
-		Material[] materials = new Material[instantiatedObjects.Count];
+		fader.fadeOutTime = seconds * 2f;
+		fader.MakeInvisible ();
+		yield return new WaitForSeconds(seconds * 2f);
 		for (int i = 0; i < instantiatedObjects.Count; i++){
-			materials[i] = new Material(instantiatedObjects[i].renderer.material);
-			instantiatedObjects[i].renderer.material = materials[i];
+			Destroy (instantiatedObjects[i]);
 		}
-		for (float t = 0; t < seconds; t += Time.deltaTime){
-			float alpha = Mathf.SmoothStep(1, 0, t/seconds);
-			for (int i = 0; i < instantiatedObjects.Count; i++){
-				instantiatedObjects[i].renderer.material.color = new Color(materials[i].color.r, materials[i].color.g, materials[i].color.b, alpha);
-			}
-			yield return null;
-		}
-		yield return new WaitForSeconds(seconds);
-		for (int i = 0; i < instantiatedObjects.Count; i++){
-			GameObject.Destroy(instantiatedObjects[i]);
-		}
+		Destroy(this.gameObject);
+
 	}
 
 }

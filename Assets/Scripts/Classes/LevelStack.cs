@@ -8,12 +8,14 @@ public class LevelStack : MonoBehaviour {
 	public int levelDepthToGenerate;
 	public int levelDepth;
 	public float transitionTime;
+	public bool rotating = false;
 
 	private int levelCount;
 	private GameObject[] levelStackObjects; //used for translating planes
 	private Queue<Level> levelStack;
 
 	private bool transitioning;
+
 
 	public void NextLevel(){
 		if (transitioning) return;
@@ -22,6 +24,7 @@ public class LevelStack : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		rotating = false;
 		levelStack = new Queue<Level>();
 		levelStackObjects = new GameObject[levelDepthToGenerate];
 		levelCount = 0;
@@ -31,8 +34,18 @@ public class LevelStack : MonoBehaviour {
 	void Update () {
 		if (levelCount < levelDepthToGenerate){
 			GameObject l = CreateNewLevel();
+			Level lev = l.GetComponent<Level>();
+			lev.Init();
+			EventHandler.GenerateNewLevel(lev);
 			levelStackObjects[levelCount++] = l;
 			//levelStack.Enqueue(l.GetComponent<Level>());
+		}
+
+		if (rotating){
+			for(int i = 0; i < levelStackObjects.Length; i++){
+				Transform t = levelStackObjects[i].transform;
+				t.RotateAround(t.position, new Vector3(0, 0, 1), 1f);
+			}
 		}
 	}
 
@@ -43,7 +56,11 @@ public class LevelStack : MonoBehaviour {
 		return level;
 	}
 
-	IEnumerator SmoothForward(float seconds = 1f){
+	public void Rotate(float speed){
+
+	}
+
+	IEnumerator SmoothForward(float seconds){
 		transitioning = true;
 
 		Debug.Log ("Going next level");
