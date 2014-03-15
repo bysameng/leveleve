@@ -1,16 +1,30 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Classes/Level.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Input/InputHandler.cs">
     <Files>
-      <File FileName="Assets/Scripts/Main.cs" Line="27" Column="22" />
-      <File FileName="Assets/Scripts/Input/MouseCursorMover.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Main.cs" Line="31" Column="1" />
-      <File FileName="Assets/Scripts/Objects/Exit.cs" Line="8" Column="29" />
-      <File FileName="Assets/Scripts/Classes/Level.cs" Line="65" Column="46" />
-      <File FileName="Assets/Scripts/Classes/LevelWriter.cs" Line="25" Column="3" />
-      <File FileName="Assets/Scripts/Classes/LevelStack.cs" Line="53" Column="38" />
-      <File FileName="Assets/Scripts/Classes/EventHandler.cs" Line="6" Column="15" />
+      <File FileName="Assets/Scripts/Fader.cs" Line="89" Column="66" />
+      <File FileName="Assets/Scripts/Objects/Exit.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/TitleScreen.cs" Line="29" Column="17" />
+      <File FileName="Assets/Scripts/Classes/EventHandler.cs" Line="45" Column="19" />
+      <File FileName="Assets/Scripts/Classes/LevelWriter.cs" Line="43" Column="32" />
+      <File FileName="Assets/Scripts/Main.cs" Line="62" Column="62" />
+      <File FileName="Assets/Scripts/Input/InputHandler.cs" Line="27" Column="27" />
+      <File FileName="Assets/Scripts/DeathWall.cs" Line="18" Column="25" />
+      <File FileName="Assets/Scripts/Lenses.cs" Line="86" Column="5" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Assembly-CSharp-vs" expanded="True">
+            <Node name="Scripts" expanded="True">
+              <Node name="Input" expanded="True">
+                <Node name="InputHandler.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

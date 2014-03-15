@@ -1,0 +1,26 @@
+//Originally by Bill Vinton (Sync1B)
+
+Shader "Unlit/AlphaSelfIllum" {
+	Properties {
+		_Color ("Color Tint", Color) = (1,1,1,1)
+		_MainTex ("SelfIllum Color (RGB) Alpha (A)", 2D) = "white"
+	}
+	Category {
+	   Lighting On
+	   ZWrite Off
+	   Cull Back
+	   Offset -1, -1
+	   Blend SrcAlpha OneMinusSrcAlpha
+	   Tags { "Queue" = "transparent" }
+	   SubShader {
+			Material {
+			   Emission [_Color]
+			}
+			Pass {
+			   SetTexture [_MainTex] {
+					  Combine Texture * Primary, Texture * Primary
+				}
+			}
+		}
+	}
+}

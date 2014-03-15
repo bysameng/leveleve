@@ -4,15 +4,31 @@ using System.Collections.Generic;
 
 public class Level : MonoBehaviour{
 
-//	private int _sizex;
+
 	public int SizeX{
 		get;
 		private set;
 	}
-//	private int _sizey;
+
 	public int SizeY{
 		get;
 		private set;
+	}
+
+	public int ExitX{
+		get; private set;
+	}
+
+	public int ExitY{
+		get; private set;
+	}
+
+	public int LastExitX{
+		get; set;
+	}
+
+	public int LastExitY{
+		get; set;
 	}
 
 	protected int[,] grid;
@@ -25,6 +41,7 @@ public class Level : MonoBehaviour{
 	public void Init(){
 		SizeX = (int)transform.localScale.x;
 		SizeY = (int)transform.localScale.y;
+		LastExitX = LastExitY = 0;
 		fader = gameObject.AddComponent<Fader>();
 		grid = new int[SizeX, SizeY];
 		for (int i = 0; i < SizeX; i++)
@@ -48,24 +65,35 @@ public class Level : MonoBehaviour{
 			return;
 		}
 		grid[x, y] = val;
+		if (val == 1){
+			ExitX = x;
+			ExitY = y;
+		}
+	}
+
+	public void AddObject(GameObject obj){
+		//Debug.Log ("Adding"+obj.name);
+		instantiatedObjects.Add(obj);
+	}
+
+	public int WallCount(){
+
+		return (instantiatedObjects.Count-1)/4;
 	}
 
 	public void PopulateGrid(){
 		Debug.Log("Populating grid");
 
 	}
-
-
-
+	
 	IEnumerator Fader(float seconds){
-		fader.fadeOutTime = seconds * 2f;
+		fader.fadeOutTime = seconds*2f;
 		fader.MakeInvisible ();
-		yield return new WaitForSeconds(seconds * 2f);
+		yield return new WaitForSeconds(seconds * 4f);
 		for (int i = 0; i < instantiatedObjects.Count; i++){
 			Destroy (instantiatedObjects[i]);
 		}
 		Destroy(this.gameObject);
-
 	}
 
 }

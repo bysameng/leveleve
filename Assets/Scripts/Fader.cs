@@ -112,6 +112,11 @@ public class Fader : MonoBehaviour {
 			}
 			yield return null;
 		}
+		for (int j = 0; j < renderers.Length; j++){
+			Color current = renderers[j].material.color;
+			current.a = 0;
+			renderer.material.color = current;
+		}
 		faded = false;
 		fading = false;
 		visible = false;
