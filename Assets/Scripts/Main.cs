@@ -67,7 +67,18 @@ public class Main : MonoBehaviour {
 		if (!isPlaying && gameOverScreen){
 			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-70, 100, 100), "GAME OVER", myGUIStyle);
 			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-30, 100, 100), "TIME: " + string.Format("{0:0.0000}", totalTime + timer), myGUIStyle);
-			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-10, 100, 100), "r to restart", myGUIStyle);
+			switch (iHandler.lastInputDevice){
+			case 0:
+				GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-10, 100, 100), "r to restart", myGUIStyle);
+				break;
+			case 1:
+				GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-10, 100, 100), "start to restart", myGUIStyle);
+				break;
+			case 2:
+				GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-10, 100, 100), "r / middle mouse to restart", myGUIStyle);
+				break;
+			}
+
 			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-50, 100, 100), "LEVELS: " + LevelCount, myGUIStyle);
 			GUI.Label(new Rect(Screen.width/2-51, Screen.height/100, 100, 100), "SCORE: " + Mathf.FloorToInt(Score), myGUIStyle);
 		}

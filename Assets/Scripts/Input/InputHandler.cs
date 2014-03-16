@@ -5,8 +5,13 @@ public class InputHandler : MonoBehaviour{
 
 	private bool enableKeys = true;
 	private bool enableMouse = true;
+	private bool enablePad = true;
 	private bool isVisible = true;
 	private bool canSlow = true;
+
+	public int lastInputDevice {
+		get; private set;
+	}
 
 	private Vector3 mousePosition;
 	private Vector3 lastMousePosition;
@@ -23,10 +28,10 @@ public class InputHandler : MonoBehaviour{
 	public float speed = 20f;
 	public float slowSpeed = 10f;
 
-	private float minx = 1f;
-	private float maxx = 99f;
-	private float miny = 1f;
-	private float maxy = 99f;
+	private float minx = 0f;
+	private float maxx = 100f;
+	private float miny = 0f;
+	private float maxy = 100f;
 
 	new public bool enabled = true;
 
@@ -38,29 +43,33 @@ public class InputHandler : MonoBehaviour{
 	//	cursorController = cursor.GetComponent<CharacterController>();
 		cursor = (GameObject)Instantiate(Resources.Load ("Prefabs/CursorMesh"), new Vector3(50, 30, 0), Quaternion.identity);
 		cursorCollider = cursor.GetComponentInChildren<BoxCollider>();
+
+		mousePosition = Input.mousePosition;
+		lastMousePosition = mousePosition;
+		mousePosition.z = cursor.transform.position.z;
 	}
 	
 	// Update is called once per frame
 	// do input stuff here
 	void Update () {
-
+		
 		if (Input.GetKeyDown(KeyCode.Escape)){
 			EventHandler.Dead();
 		}
 		
-		if (Input.GetButtonDown("Red")){
+		if (Input.GetButtonDown("Red") || Input.GetAxis ("GamepadLT") > 0){
 			EventHandler.ChangeLense("Red", true);
 		}
 		
-		if (Input.GetButtonUp ("Red")){
+		if ((Input.GetButtonUp ("Red") || !(Input.GetAxis("GamepadLT") > 0)) && !Input.GetButton("Red") ){
 			EventHandler.ChangeLense("Red", false);
 		}
 		
-		if (Input.GetButtonDown("Blue")){
+		if (Input.GetButtonDown("Blue") || Input.GetAxis ("GamepadRT") > 0){
 			EventHandler.ChangeLense("Blue", true);
 		}
 		
-		if (Input.GetButtonUp ("Blue")){
+		if ((Input.GetButtonUp ("Blue") || !(Input.GetAxis("GamepadRT") > 0)) && !Input.GetButton("Blue") ){
 			EventHandler.ChangeLense("Blue", false);
 		}
 
@@ -74,6 +83,8 @@ public class InputHandler : MonoBehaviour{
 
 		enableKeys = true; 
 		enableMouse = false;
+		enablePad = false;
+
 		if (isVisible) Screen.showCursor = false;
 
 		if (enableKeys){
@@ -98,11 +109,49 @@ public class InputHandler : MonoBehaviour{
 			//Debug.Log (cursor.transform.position);
 			Vector3 newPos = cursor.transform.position + trajectory;
 			//Debug.Log (newPos);
-			if (!(newPos.x < minx || newPos.x > maxx || newPos.y < miny || newPos.y > maxy)){
-				cursor.transform.Translate(trajectory);
+			if (newPos.x < minx || newPos.x > maxx)
+				trajectory.x = 0;
+			if (newPos.y < miny || newPos.y > maxy)
+				trajectory.y = 0;
+			cursor.transform.Translate(trajectory);
+
+			if (trajectory == Vector3.zero){
+				enablePad = true;
 			}
-			if (trajectory == Vector3.zero)
+			else lastInputDevice = 0;
+		}
+
+		if (enablePad) {
+			Vector3 trajectory = new Vector3(0,0,0);
+			trajectory.x = Input.GetAxis("GamepadXLS");
+			trajectory.y = -Input.GetAxis("GamepadYLS");
+			if (trajectory == Vector3.zero){
+				trajectory.x = Input.GetAxis("GamepadXRS");
+				trajectory.y = -Input.GetAxis("GamepadYRS");
+			}
+			if (trajectory == Vector3.zero){
+				trajectory.x = Input.GetAxis("GamepadXD");
+				trajectory.y = Input.GetAxis("GamepadYD");
+			}
+			
+			trajectory = trajectory * speed * 10 * Time.deltaTime;
+
+			Vector3 newPos = cursor.transform.position + trajectory;
+			if (newPos.x < minx || newPos.x > maxx)
+				trajectory.x = 0;
+			if (newPos.y < miny || newPos.y > maxy)
+				trajectory.y = 0;
+			cursor.transform.Translate(trajectory);
+
+			if (trajectory == Vector3.zero){
 				enableMouse = true;
+			}
+			else lastInputDevice = 1;
+		}
+
+		if (Input.mousePosition.x > Screen.width || Input.mousePosition.x < 0 ||
+			Input.mousePosition.y > Screen.height || Input.mousePosition.y < 0) {
+				enableMouse = false;
 		}
 
 		if (enableMouse){
@@ -116,7 +165,6 @@ public class InputHandler : MonoBehaviour{
 			Vector3 deltaPos = Camera.main.ScreenToWorldPoint(mousePosition) - cursor.transform.position;
 			//Debug.Log (deltaPos);
 
-
 			if (mousePosition != lastMousePosition && deltaPos != Vector3.zero){
 				cursor.transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
 				//cursorCollider.center = (deltaPos * -1) / 2; //midpoint of movement
@@ -126,8 +174,7 @@ public class InputHandler : MonoBehaviour{
 				}
 				//cursorCollider.transform.Rotate(new Vector3(0, 0, angle));
 				//cursorCollider.transform.localScale = new Vector3(deltaPos.magnitude, 1, 1);
-
-
+				lastInputDevice = 2;
 			}
 
 			if (deltaPos != Vector3.zero){
@@ -135,13 +182,19 @@ public class InputHandler : MonoBehaviour{
 				Debug.DrawLine(cursor.transform.position, origPos, Color.red, 5f);
 				RaycastHit hit;
 				if (Physics.Raycast(cursor.transform.position, deltaPos * -1f, out hit, deltaPos.magnitude)){
+					Debug.Log ("raycast kill");
 					hit.transform.gameObject.SendMessage("OnTriggerEnter", cursorCollider);
 				}
+
 			}
 
 			lastMousePosition = mousePosition;
+
 		}
 
+
+
+		
 
 	}
 
