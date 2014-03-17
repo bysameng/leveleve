@@ -8,6 +8,7 @@ public class EventHandler : MonoBehaviour {
 	public static Lenses Lens;
 	public static InputHandler iHandler;
 	public static TitleScreen tScreen;
+	public static HighScoreHandler hsHandler;
 	public static bool IsPlaying{
 		get{return main.isPlaying;}
 	}
@@ -23,6 +24,7 @@ public class EventHandler : MonoBehaviour {
 		Lens = main.Lens;
 		iHandler = GetComponent<InputHandler>();
 		debugr = GetComponent<DebuggerGUI>();
+		hsHandler = GetComponent<HighScoreHandler>();
 	}
 
 	public static void NewGame(){
@@ -51,6 +53,7 @@ public class EventHandler : MonoBehaviour {
 		case "Red":		return (Lens.RedLens && !Lens.BlueLens && !Lens.PurpleLens);
 		case "Blue":	return (!Lens.RedLens && Lens.BlueLens && !Lens.PurpleLens);
 		case "Purple":	return (Lens.PurpleLens);
+		case "Clear":	return (!Lens.RedLens && !Lens.BlueLens && !Lens.PurpleLens);
 		default: break;
 		}
 		return false;
@@ -74,7 +77,36 @@ public class EventHandler : MonoBehaviour {
 		Lens.UpdateLens();
 	}
 
+
+	public static void DisplayHighScores(){
+
+	}
+
+	public static void AddScore(int score){
+		StaticCoroutine.DoCoroutine(ScoreAdder(score));
+	}
+
+	public static void StartInput(){
+		iHandler.GetInput();
+	}
+
+	public static void SetInputEnabled(bool enabled){
+		iHandler.fullEnabled = enabled;
+	}
+
 	public static void ErrorMessage(string error){
 		debugr.addErrorMessage(error);
 	}
+
+	static IEnumerator ScoreAdder(int score){
+		StartInput();
+		hsHandler.GettingInput = true;
+		while (iHandler.inputtingString){
+			yield return null;
+		}
+		hsHandler.AddScore(score, iHandler.inputBuffer);
+		hsHandler.Start();
+	}
+
+
 }

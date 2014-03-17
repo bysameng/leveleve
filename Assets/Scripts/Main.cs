@@ -16,6 +16,7 @@ public class Main : MonoBehaviour {
 
 	private LevelWriter lWriter;
 	private LevelStack lStack;
+	private static HighScoreHandler hsHandler;
 
 	private static InputHandler iHandler;
 
@@ -26,6 +27,8 @@ public class Main : MonoBehaviour {
 	public bool gameOverScreen{
 		get; private set;
 	}
+
+	public bool displayingHighScores = false;
 
 
 	private GUIStyle _myGUIStyle;
@@ -57,6 +60,7 @@ public class Main : MonoBehaviour {
 		iHandler = GetComponent<InputHandler>();
 		isPlaying = true;
 		gameOverScreen = false;
+		hsHandler = GetComponent<HighScoreHandler>();
 
 		if (!Screen.fullScreen){
 			Screen.SetResolution(Screen.height, Screen.height, false);
@@ -98,6 +102,13 @@ public class Main : MonoBehaviour {
 				}
 			}
 		}
+		if(displayingHighScores){
+			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+50, 100, 100), "HIGH SCORES", myGUIStyle);
+			for(int i = 0; i < hsHandler.scoreboardSize; i++){
+
+				GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+70 + (i * 20), 100, 100), (i+1)+": "+hsHandler.scores[i]+"\t\t"+hsHandler.names[i], myGUIStyle);
+			}
+		}
 	}
 
 	void Update(){
@@ -112,6 +123,7 @@ public class Main : MonoBehaviour {
 	}
 
 	public void NewGame(){
+		displayingHighScores = false;
 		gameOverScreen = false;
 		LevelCount = 0;
 		timer = -1f;
@@ -142,6 +154,9 @@ public class Main : MonoBehaviour {
 		isPlaying = false;
 		Debug.Log ("Dead");
 		iHandler.enabled = false;
+		displayingHighScores = true;
+		hsHandler.NewScore((int)Score);
+
 
 	}
 

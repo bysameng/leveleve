@@ -34,6 +34,14 @@ public class InputHandler : MonoBehaviour{
 	private float maxy = 100f;
 
 	new public bool enabled = true;
+	public bool fullEnabled = true;
+
+
+	public string inputBuffer{
+		get; private set;
+	}
+
+	public bool inputtingString = false;
 
 	// Use this for initialization
 	void Start () {
@@ -52,9 +60,11 @@ public class InputHandler : MonoBehaviour{
 	// Update is called once per frame
 	// do input stuff here
 	void Update () {
+		if(!fullEnabled) return;
 		
 		if (Input.GetKeyDown(KeyCode.Escape)){
 			EventHandler.Dead();
+			isVisible = false;
 		}
 		
 		if (Input.GetButtonDown("Red") || Input.GetAxis ("GamepadLT") > 0){
@@ -86,6 +96,7 @@ public class InputHandler : MonoBehaviour{
 		enablePad = false;
 
 		if (isVisible) Screen.showCursor = false;
+		else Screen.showCursor = true;
 
 		if (enableKeys){
 			Vector3 trajectory = new Vector3(0, 0, 0);
@@ -177,7 +188,7 @@ public class InputHandler : MonoBehaviour{
 				lastInputDevice = 2;
 			}
 
-			if (deltaPos != Vector3.zero){
+			if (deltaPos != Vector3.zero && lastInputDevice == 2){
 				//Debug.Log (cursor.transform.position+ deltaPos);
 				Debug.DrawLine(cursor.transform.position, origPos, Color.red, 5f);
 				RaycastHit hit;
@@ -185,21 +196,49 @@ public class InputHandler : MonoBehaviour{
 					Debug.Log ("raycast kill");
 					hit.transform.gameObject.SendMessage("OnTriggerEnter", cursorCollider);
 				}
-
 			}
 
 			lastMousePosition = mousePosition;
 
 		}
 
-
-
-		
-
 	}
 
+	
 
 	public void SetEnable(bool isEnabled){
 		enableMouse = isEnabled;
 	}
+
+
+
+	public void GetInput(){
+		StartCoroutine(InputGetter());
+	}
+
+
+
+	IEnumerator InputGetter(){
+		inputBuffer = "";
+		if(inputtingString) yield break;
+		inputtingString = true;
+		while (inputtingString){
+			foreach (char c in Input.inputString){
+				if (c == "\b"[0]){
+					if (inputBuffer.Length != 0){
+						inputBuffer = inputBuffer.Substring(0, inputBuffer.Length-1);
+					}
+				}
+				else if (c == "\n"[0] || c == "\r"[0]){
+					inputtingString = false;
+					yield break;
+				}
+				else
+					inputBuffer += c;
+			}
+			yield return null;
+		}
+		inputtingString = false;
+	}
+
 }

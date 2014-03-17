@@ -47,9 +47,10 @@ public class LevelWriter : MonoBehaviour{
 
 			int colorCount = 1;
 
-			for (int i = 1; i < Random.Range (0, 2) * Mathf.Sqrt(generatedLevelCount); i++){
-				if (generatedLevelCount > 5) colorCount = 2;
-				if (generatedLevelCount > 20) colorCount = 3;
+			for (int i = 1; i < (Random.Range (0, 3) * Mathf.Sqrt(generatedLevelCount)/2) * difficulty; i++){
+				if (generatedLevelCount > 6) colorCount = 2;
+				if (generatedLevelCount > 18) colorCount = 3;
+				if (generatedLevelCount > 25) colorCount = 4;
 				WriteRectangleAround(level, level.ExitX, level.ExitY, 10*i*i, 10*i*i, Random.Range(2, 2+colorCount));
 				generatedLevelCount++;
 			}
