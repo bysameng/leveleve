@@ -17,8 +17,9 @@ public class HighScoreHandler : MonoBehaviour{
 		get; private set;
 	}
 
+	public string nameBuffer;
+	public int newScoreIndex;
 
-	
 
 	public void Start(){
 		ReadHighScores();
@@ -28,15 +29,17 @@ public class HighScoreHandler : MonoBehaviour{
 	void OnGUI(){
 		if (GettingInput){
 			EventHandler.SetInputEnabled(false);
-			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+50, 100, 100), "NEW HIGH SCORE!", EventHandler.main.myGUIStyle);
-			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+70, 100, 100), "NAME: "+ EventHandler.iHandler.inputBuffer, EventHandler.main.myGUIStyle);
+			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+30, 100, 100), "NEW HIGH SCORE!", EventHandler.main.myGUIStyle);
+			//GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+30, 100, 100), "NAME: "+ nameBuffer, EventHandler.main.myGUIStyle);
 		}
+		else EventHandler.SetInputEnabled(true);
 	}
 
 	
 	public void NewScore(int score){
 		int rank = CheckIfHigh(score);
 		if (rank > -1){
+			newScoreIndex = rank;
 			EventHandler.AddScore(score);
 		}
 	}
@@ -46,7 +49,7 @@ public class HighScoreHandler : MonoBehaviour{
 		string[] scoreNames = new string[scoreboardSize];
 		int scoreNum = 0;
 		for (int i = 0; i < scoreboardSize; i++){
-			scoreNames[i] = PlayerPrefs.GetString("HighScoreName"+scoreNum);
+			scoreNames[i] = PlayerPrefs.GetString("HighScoreName"+scoreNum++);
 		}
 		this.names = scoreNames;
 	}
@@ -55,10 +58,11 @@ public class HighScoreHandler : MonoBehaviour{
 		int[] scores = new int[scoreboardSize];
 		int scoreNum = 0;
 		for (int i = 0; i < scoreboardSize; i++){
-			scores[i] = PlayerPrefs.GetInt("HighScore"+scoreNum);
+			scores[i] = PlayerPrefs.GetInt("HighScore"+scoreNum++);
 		}
 		this.scores = scores;
 	}
+
 
 
 	private int CheckIfHigh(int score){
@@ -66,27 +70,36 @@ public class HighScoreHandler : MonoBehaviour{
 		int ans = -1;
 		for (int i = 0; i < scoreboardSize; i++){
 			if (scores[i] < score){
+				Debug.Log ("score "+i);
 				ans = i;
+				break;
 			}
 		}
 		return ans;
 	}
 
+
+
 	public void AddScore(int score, string name){
 		int index = CheckIfHigh(score);
-		scores[0] = score;
-		names[0] = name;
-		for (int i = index; i < scoreboardSize; i++){
-			if (i-1 >= 0){
+		if (index == -1) Debug.LogError("This shouldn't happen.");	
+		for (int i = scoreboardSize; i >= index; i--){
+			if (i-1 >= 0 && i < scoreboardSize){
 				scores[i] = scores[i-1];
 				names[i] = names[i-1];
 			}
 		}
 		scores[index] = score;
+		names[index] = name;
 		WriteScores();
 		ReadHighScores();
 		ReadHighScoreNames();
+		GettingInput = false;
+		newScoreIndex = -1;
+		nameBuffer = "";
 	}
+
+
 
 	private void WriteScores(){
 		for(int i = 0; i < scoreboardSize; i++){

@@ -90,22 +90,27 @@ public class EventHandler : MonoBehaviour {
 		iHandler.GetInput();
 	}
 
+
 	public static void SetInputEnabled(bool enabled){
 		iHandler.fullEnabled = enabled;
 	}
+
 
 	public static void ErrorMessage(string error){
 		debugr.addErrorMessage(error);
 	}
 
+
 	static IEnumerator ScoreAdder(int score){
 		StartInput();
 		hsHandler.GettingInput = true;
 		while (iHandler.inputtingString){
+			hsHandler.nameBuffer = iHandler.inputBuffer;
 			yield return null;
 		}
 		hsHandler.AddScore(score, iHandler.inputBuffer);
 		hsHandler.Start();
+	
 	}
 
 

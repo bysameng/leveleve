@@ -231,9 +231,10 @@ public class InputHandler : MonoBehaviour{
 				}
 				else if (c == "\n"[0] || c == "\r"[0]){
 					inputtingString = false;
+					Debug.LogError (inputtingString);
 					yield break;
 				}
-				else
+				else if (inputBuffer.Length < 3)
 					inputBuffer += c;
 			}
 			yield return null;

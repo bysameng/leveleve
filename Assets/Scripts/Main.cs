@@ -43,6 +43,18 @@ public class Main : MonoBehaviour {
 		}
 	}
 
+	private GUIStyle _myGUIStyleLeftAlign;
+	public GUIStyle myGUIStyleLeftAlign{
+		get{
+			if (_myGUIStyleLeftAlign == null){
+				_myGUIStyleLeftAlign = new GUIStyle();
+				_myGUIStyleLeftAlign.font = myGUIStyle.font;
+				_myGUIStyleLeftAlign.alignment = TextAnchor.MiddleLeft;
+			}
+			return _myGUIStyleLeftAlign;
+		}
+	}
+
 	public Lenses Lens{
 		get;
 		private set;
@@ -105,11 +117,19 @@ public class Main : MonoBehaviour {
 		if(displayingHighScores){
 			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+50, 100, 100), "HIGH SCORES", myGUIStyle);
 			for(int i = 0; i < hsHandler.scoreboardSize; i++){
-
-				GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+70 + (i * 20), 100, 100), (i+1)+": "+hsHandler.scores[i]+"\t\t"+hsHandler.names[i], myGUIStyle);
+				if (hsHandler.GettingInput){
+				    if (i == hsHandler.newScoreIndex)
+						GUI.Label(new Rect(Screen.width/2-60, Screen.height/2+70+(i*20), 100, 100), (i+1)+": "+hsHandler.nameBuffer+"\t\t"+(int)Score, myGUIStyleLeftAlign);
+					else if (i > hsHandler.newScoreIndex)
+						GUI.Label(new Rect(Screen.width/2-60, Screen.height/2+70+(i*20), 100, 100), (i+1)+": "+hsHandler.names[i-1]+"\t\t"+(int)Score, myGUIStyleLeftAlign);
+				}
+				else
+				GUI.Label(new Rect(Screen.width/2-60, Screen.height/2+70 + (i * 20), 100, 100), (i+1)+": "+hsHandler.names[i]+"\t\t"+hsHandler.scores[i], myGUIStyleLeftAlign);
 			}
 		}
 	}
+
+
 
 	void Update(){
 		if (isPlaying){
