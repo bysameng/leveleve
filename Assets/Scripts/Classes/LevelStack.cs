@@ -47,8 +47,8 @@ public class LevelStack : MonoBehaviour {
 		if (rotating && EventHandler.IsPlaying){
 			for(int i = 0; i < levelStack.Length-1; i++){
 				Transform t = levelStack[i].transform;
-				t.Rotate(0, 0, Time.deltaTime * EventHandler.LevelCount);
-				EventHandler.debugr.rotation = ""+Time.deltaTime * EventHandler.LevelCount;
+				t.Rotate(0, 0, Time.deltaTime * EventHandler.LevelCount * 2);
+				EventHandler.debugr.rotation = ""+Time.deltaTime * EventHandler.LevelCount * 2;
 			}
 		}
 	}

@@ -29,7 +29,7 @@ public class HighScoreHandler : MonoBehaviour{
 	void OnGUI(){
 		if (GettingInput){
 			EventHandler.SetInputEnabled(false);
-			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+30, 100, 100), "NEW HIGH SCORE!", EventHandler.main.myGUIStyle);
+			GUI.Label(new Rect(Screen.width/2-51, Screen.height/10, 100, 100), "NEW HIGH SCORE!", EventHandler.main.myGUIStyle);
 			//GUI.Label(new Rect(Screen.width/2-51, Screen.height/2+30, 100, 100), "NAME: "+ nameBuffer, EventHandler.main.myGUIStyle);
 		}
 		else EventHandler.SetInputEnabled(true);
@@ -92,6 +92,14 @@ public class HighScoreHandler : MonoBehaviour{
 		scores[index] = score;
 		names[index] = name;
 		WriteScores();
+		ReadHighScores();
+		ReadHighScoreNames();
+		GettingInput = false;
+		newScoreIndex = -1;
+		nameBuffer = "";
+	}
+
+	public void Cancel(){
 		ReadHighScores();
 		ReadHighScoreNames();
 		GettingInput = false;

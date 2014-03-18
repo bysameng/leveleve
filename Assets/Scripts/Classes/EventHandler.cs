@@ -102,14 +102,21 @@ public class EventHandler : MonoBehaviour {
 
 
 	static IEnumerator ScoreAdder(int score){
+		if(!main.singleUserScores){
 		StartInput();
 		hsHandler.GettingInput = true;
 		while (iHandler.inputtingString){
 			hsHandler.nameBuffer = iHandler.inputBuffer;
 			yield return null;
 		}
-		hsHandler.AddScore(score, iHandler.inputBuffer);
-		hsHandler.Start();
+		if(iHandler.inputBuffer != null){
+			Debug.Log("saved");
+			hsHandler.AddScore(score, hsHandler.nameBuffer);
+		}
+		else hsHandler.Cancel();
+		}
+		else
+			hsHandler.AddScore(score, "you");
 	
 	}
 

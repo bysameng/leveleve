@@ -46,13 +46,31 @@ public class LevelWriter : MonoBehaviour{
 
 
 			int colorCount = 1;
+			if (generatedLevelCount > 6) colorCount = 2;
+			if (generatedLevelCount > 13) colorCount = 3;
+			if (generatedLevelCount > 20) colorCount = 4;
+			
+			
+			for (int i = 1; i < (Random.Range (1, 3) * Mathf.Sqrt(generatedLevelCount)/2) * difficulty; i++){
+				if(i == 1){
+					if(Random.Range(0, 5) > 4) continue;
+				}
+				if(Random.value > .9f)
+					i+=1;
 
-			for (int i = 1; i < (Random.Range (0, 3) * Mathf.Sqrt(generatedLevelCount)/2) * difficulty; i++){
-				if (generatedLevelCount > 6) colorCount = 2;
-				if (generatedLevelCount > 18) colorCount = 3;
-				if (generatedLevelCount > 25) colorCount = 4;
-				WriteRectangleAround(level, level.ExitX, level.ExitY, 10*i*i, 10*i*i, Random.Range(2, 2+colorCount));
-				generatedLevelCount++;
+				GameObject Wall = WriteRectangleAround(level, level.ExitX, level.ExitY, 10*i*i, 10*i*i, Random.Range(2, 2+colorCount));
+				Wall.AddComponent<Rotator>().rotationPower = Random.Range(-2f, 2f);
+
+			}
+			if(generatedLevelCount > 18)
+			for (int i = 1; i < (Random.Range (0, 2) * Mathf.Sqrt(generatedLevelCount)/3) * difficulty; i++){
+				GameObject l = WriteBlock(level, level.ExitX+5, level.ExitY, level.ExitX+Random.Range(1, 4)*20, level.ExitY, Random.Range(2, 2+colorCount));
+				GameObject Line = new GameObject("Line");
+				Line.transform.position = new Vector3(level.ExitX, level.ExitY, level.transform.position.z);
+				Line.AddComponent<Rotator>().rotationPower = Random.Range(-2f, 2f);
+				l.transform.parent = Line.transform;
+				Line.transform.parent = level.transform;
+				Line.transform.Rotate(new Vector3(0, 0, Random.Range(0, 180)));
 			}
 		}
 		WriteLevel(level);
@@ -84,7 +102,7 @@ public class LevelWriter : MonoBehaviour{
 		}
 	}
 
-	private void WriteBlock(Level level, int x0, int y0, int x1, int y1, int val){
+	private GameObject WriteBlock(Level level, int x0, int y0, int x1, int y1, int val){
 		int deltaX = Mathf.Abs (x1 - x0);
 		int deltaY = Mathf.Abs (y1 - y0);
 
@@ -106,21 +124,27 @@ public class LevelWriter : MonoBehaviour{
 		obj.transform.localScale = new Vector3(deltaX + 1, deltaY + 1, .5f);
 		obj.transform.parent = level.transform;
 		level.AddObject(obj);
+		return obj;
 
 	}
 
-	private void WriteRectangle(Level level, int x, int y, int w, int h, int val){
-		if (w == 0 || h == 0) return;
-		WriteBlock(level, x, y, x+w, y, val);
-		WriteBlock(level, x, y, x, y+h, val);
-		WriteBlock(level, x+w, y, x+w, y+h, val);
-		WriteBlock(level, x, y+h, x+w, y+h, val);
+	private GameObject WriteRectangle(Level level, int x, int y, int w, int h, int val){
+		if (w == 0 || h == 0) return null;
+		GameObject Wall = new GameObject("BoxWall "+val);
+		Wall.transform.position = new Vector3(level.ExitX, level.ExitY, level.transform.position.z - 19f);
+		WriteBlock(level, x, y, x+w, y, val).transform.parent = Wall.transform;
+		WriteBlock(level, x, y, x, y+h, val).transform.parent = Wall.transform;
+		WriteBlock(level, x+w, y, x+w, y+h, val).transform.parent = Wall.transform;
+		WriteBlock(level, x, y+h, x+w, y+h, val).transform.parent = Wall.transform;
+		return Wall;
 	}
 
 
-	private void WriteRectangleAround(Level level, int x, int y, int w, int h, int val){
-		if (w == 0 || h == 0) return;
-		WriteRectangle(level, x-w/2, y-h/2, w, h, val); 
+	private GameObject WriteRectangleAround(Level level, int x, int y, int w, int h, int val){
+		if (w == 0 || h == 0) return null;
+		GameObject Wall = WriteRectangle(level, x-w/2, y-h/2, w, h, val);
+		Wall.transform.parent = level.transform;
+		return Wall;
 	}
 	
 

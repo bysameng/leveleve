@@ -60,6 +60,11 @@ public class InputHandler : MonoBehaviour{
 	// Update is called once per frame
 	// do input stuff here
 	void Update () {
+
+		if(Input.GetKeyUp(KeyCode.BackQuote)){
+			EventHandler.debugr.enabled = !EventHandler.debugr.enabled;
+		}
+
 		if(!fullEnabled) return;
 		
 		if (Input.GetKeyDown(KeyCode.Escape)){
@@ -220,18 +225,30 @@ public class InputHandler : MonoBehaviour{
 
 	IEnumerator InputGetter(){
 		inputBuffer = "";
+		inputBuffer = inputBuffer.Substring(0, 0);
 		if(inputtingString) yield break;
 		inputtingString = true;
+
+		bool removedInvisible = false;
+
 		while (inputtingString){
+
+			if(Input.GetKeyDown(KeyCode.Escape)){
+				inputtingString = false;
+				inputBuffer = null;
+				yield break;
+			}
+
+
+			Debug.Log(inputBuffer.Length);
 			foreach (char c in Input.inputString){
 				if (c == "\b"[0]){
-					if (inputBuffer.Length != 0){
+					if (inputBuffer.Length > 0){
 						inputBuffer = inputBuffer.Substring(0, inputBuffer.Length-1);
 					}
 				}
 				else if (c == "\n"[0] || c == "\r"[0]){
 					inputtingString = false;
-					Debug.LogError (inputtingString);
 					yield break;
 				}
 				else if (inputBuffer.Length < 3)

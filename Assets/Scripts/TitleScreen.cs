@@ -4,7 +4,7 @@ using System.Collections;
 public class TitleScreen : MonoBehaviour {
 
 	private Font font;
-	private float wait = 2f;
+	private float wait = 3f;
 
 	private bool displayingtitle = true;
 
