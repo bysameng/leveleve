@@ -20,6 +20,9 @@ public class LevelWriter : MonoBehaviour{
 				if  (currentPos > 0){
 					GameObject obj = (GameObject)Instantiate(ObjectsToPopulateWith[currentPos], new Vector3(i, j, level.transform.position.z - 19f), level.transform.rotation);
 					level.AddObject(obj);
+					if(currentPos == 1){
+						level.Exit = obj;
+					}
 					obj.transform.parent = level.transform;
 				}
 			}
@@ -39,7 +42,7 @@ public class LevelWriter : MonoBehaviour{
 			int randomx = Random.Range(marginx, level.SizeX - marginx);
 			int randomy = Random.Range(marginy, level.SizeY - marginy);
 		
-			if (generatedLevelCount == 0) {
+			if (generatedLevelCount ==	 0) {
 				randomx = 50; randomy = 50;
 			}
 			level.SetPos(randomx, randomy, 1);
@@ -123,6 +126,7 @@ public class LevelWriter : MonoBehaviour{
 		GameObject obj = (GameObject)Instantiate(ObjectsToPopulateWith[val], new Vector3(posX, posY, level.transform.position.z - 19f), level.transform.rotation);
 		obj.transform.localScale = new Vector3(deltaX + 1, deltaY + 1, .5f);
 		obj.transform.parent = level.transform;
+		if(EventHandler.gameMode == 2) obj.AddComponent<AutoColor>();
 		level.AddObject(obj);
 		return obj;
 

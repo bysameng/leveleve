@@ -13,7 +13,7 @@ public class DeathWall : MonoBehaviour{
 	}
 
 	void OnTriggerEnter(Collider other){
-		if (other.name == "Cursor" && EventHandler.IsPlaying){
+		if (other.name == "Cursor" && EventHandler.IsPlaying && EventHandler.gameMode != 2){
 			if (!EventHandler.CheckLens(wallColor)){
 				EventHandler.Dead();
 				EventHandler.debugr.addErrorMessage("Killed by: " + wallColor);

@@ -12,6 +12,7 @@ public class Rotator : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Rotate(new Vector3(0, 0, rotationPower * Time.deltaTime));
+		if(EventHandler.IsPlaying)
+			transform.Rotate(new Vector3(0, 0, rotationPower * Time.deltaTime * (EventHandler.LevelCount/2)));
 	}
 }

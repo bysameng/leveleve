@@ -31,6 +31,10 @@ public class Level : MonoBehaviour{
 		get; set;
 	}
 
+	public GameObject Exit{
+		get; set;
+	}
+
 	protected int[,] grid;
 
 	public List<GameObject> instantiatedObjects;

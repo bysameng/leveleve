@@ -3,6 +3,14 @@ using System.Collections;
 
 public class InputHandler : MonoBehaviour{
 
+	public int Mode{
+		get; set;
+	}
+
+	public Vector3 Destination{
+		get; set;
+	}
+
 	private bool enableKeys = true;
 	private bool enableMouse = true;
 	private bool enablePad = true;
@@ -45,6 +53,7 @@ public class InputHandler : MonoBehaviour{
 
 	// Use this for initialization
 	void Start () {
+	
 
 		QualitySettings.vSyncCount = 0;
 		mousePosition = new Vector3(0, 0, 0);
@@ -71,7 +80,9 @@ public class InputHandler : MonoBehaviour{
 			EventHandler.Dead();
 			isVisible = false;
 		}
-		
+
+		if (Mode != 2){
+
 		if (Input.GetButtonDown("Red") || Input.GetAxis ("GamepadLT") > 0){
 			EventHandler.ChangeLense("Red", true);
 		}
@@ -86,6 +97,7 @@ public class InputHandler : MonoBehaviour{
 		
 		if ((Input.GetButtonUp ("Blue") || !(Input.GetAxis("GamepadRT") > 0)) && !Input.GetButton("Blue") ){
 			EventHandler.ChangeLense("Blue", false);
+		}
 		}
 
 		if (!enabled){
@@ -102,6 +114,14 @@ public class InputHandler : MonoBehaviour{
 
 		if (isVisible) Screen.showCursor = false;
 		else Screen.showCursor = true;
+
+		if (Mode == 2 && EventHandler.LevelCount > 0){
+
+			Destination = EventHandler.GetCurrentLevelExit();
+			Vector3 newPos = Vector3.MoveTowards(cursor.transform.position, Destination, speed*Time.deltaTime/2);
+			newPos.z = 0;
+			cursor.transform.position = newPos;
+		}
 
 		if (enableKeys){
 			Vector3 trajectory = new Vector3(0, 0, 0);

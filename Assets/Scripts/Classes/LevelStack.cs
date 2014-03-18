@@ -72,11 +72,18 @@ public class LevelStack : MonoBehaviour {
 		return levelStack[1].GetComponent<Level>().WallCount();
 	}
 
+	public Level GetCurrentLevel(){
+		return levelStack[0].GetComponent<Level>();
+	}
+
+	public Level GetNextLevel(){
+		return levelStack[1].GetComponent<Level>();
+	}
 
 	IEnumerator DoNewGame(){
 		for(int i = 0; i < levelDepthToGenerate; i++)
 			StartCoroutine(SmoothForward(newGameTransitionTime));
-		yield return new WaitForSeconds ((levelDepthToGenerate)* newGameTransitionTime);
+		yield return new WaitForSeconds ((levelDepthToGenerate+1)* newGameTransitionTime);
 		Start();
 		EventHandler.NewGame();
 	}

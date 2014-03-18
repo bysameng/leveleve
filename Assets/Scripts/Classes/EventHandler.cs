@@ -4,11 +4,13 @@ using System.Collections;
 public class EventHandler : MonoBehaviour {
 
 	public static Main main;
+	public static LevelStack lStack;
 	public static DebuggerGUI debugr;
 	public static Lenses Lens;
 	public static InputHandler iHandler;
 	public static TitleScreen tScreen;
 	public static HighScoreHandler hsHandler;
+	public static AudioHandler aHandler;
 	public static bool IsPlaying{
 		get{return main.isPlaying;}
 	}
@@ -17,25 +19,40 @@ public class EventHandler : MonoBehaviour {
 		get; private set;
 	}
 
+	public static int gameMode;
+
 
 	void Awake(){
+		//gameMode = 2;
 		tScreen = gameObject.AddComponent<TitleScreen>();
 		main = GetComponent<Main>();
+		lStack = GetComponent<LevelStack>();
 		Lens = main.Lens;
 		iHandler = GetComponent<InputHandler>();
 		debugr = GetComponent<DebuggerGUI>();
 		hsHandler = GetComponent<HighScoreHandler>();
+		aHandler = GetComponent<AudioHandler>();
 	}
 
+
+
 	public static void NewGame(){
+		tScreen.started = false;
 		iHandler.cursorCollider.enabled = true;
 		iHandler.enabled = true;
+		iHandler.Mode = gameMode;
 	}
 
 	public static void NextLevel(){
+		aHandler.PlayExitSound(new Vector3((float)lStack.GetCurrentLevel().ExitX, (float)lStack.GetCurrentLevel().ExitY, 1f));
+		iHandler.Destination = new Vector3((float)lStack.GetNextLevel().ExitX, (float)lStack.GetNextLevel().ExitY, 0f);
 		tScreen.started = true;
 		main.NextLevel();
 		LevelCount++;
+	}
+
+	public static Vector3 GetCurrentLevelExit(){
+		return lStack.GetCurrentLevel().Exit.transform.position;
 	}
 
 	public static void GenerateNewLevel(Level l, int generatedLevelCount){
@@ -43,9 +60,12 @@ public class EventHandler : MonoBehaviour {
 	}
 
 	public static void Dead(){
+		aHandler.PlayDeathSound(iHandler.cursor.transform.position);
+		tScreen.started = true;
 		LevelCount = 0;
 		main.GameOver();
 		iHandler.cursorCollider.enabled = false;
+	
 	}
 
 	public static bool CheckLens(string lensName){
@@ -62,10 +82,19 @@ public class EventHandler : MonoBehaviour {
 
 	public static void ChangeLense(string lensName, bool putOn){
 		if (lensName == "Red"){
+			//Debug.Log ("Changing to red");
 			Lens.RedLens = putOn;
 		}
 		else if (lensName == "Blue"){
 			Lens.BlueLens = putOn;
+		}
+		else if (lensName == "Purple"){
+			Lens.RedLens = putOn;
+			Lens.BlueLens = putOn;
+		}
+		else if (lensName == "Clear"){
+			if (putOn)
+				Lens.ClearLens();
 		}
 
 		Lens.UpdateLens();
@@ -120,5 +149,9 @@ public class EventHandler : MonoBehaviour {
 	
 	}
 
+
+	public static void ChangeMode(int mode){
+		gameMode = mode;
+	}
 
 }

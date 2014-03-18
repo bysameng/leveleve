@@ -72,6 +72,7 @@ public class Main : MonoBehaviour {
 	}
 
 	void Awake(){
+		//singleUserScores = false;
 		lWriter = GetComponent<LevelWriter>();
 		lStack = GetComponent<LevelStack>();
 		Lens = new Lenses();
@@ -99,6 +100,7 @@ public class Main : MonoBehaviour {
 
 		if (!isPlaying && gameOverScreen){
 			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-70, 100, 100), "GAME OVER", myGUIStyle);
+			if(timer < 0) timer = 0;
 			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-30, 100, 100), "TIME: " + string.Format("{0:0.0000}", totalTime + timer), myGUIStyle);
 			if(!hsHandler.GettingInput){
 				switch (iHandler.lastInputDevice){
@@ -114,7 +116,7 @@ public class Main : MonoBehaviour {
 				}
 			}
 			if(hsHandler.GettingInput)
-				GUI.Label(new Rect(Screen.width/2-51, Screen.height/10+40+(20*(hsHandler.scoreboardSize+1)), 100, 100), "TYPE NAME or ESC TO CANCEL", myGUIStyle);
+				GUI.Label(new Rect(Screen.width/2-51, Screen.height/10+(20*(hsHandler.scoreboardSize+1)), 100, 100), "TYPE NAME or ESC TO CANCEL", myGUIStyle);
 
 			GUI.Label(new Rect(Screen.width/2-51, Screen.height/2-50, 100, 100), "LEVELS: " + LevelCount, myGUIStyle);
 			GUI.Label(new Rect(Screen.width/2-51, Screen.height/100, 100, 100), "SCORE: " + Mathf.FloorToInt(Score), myGUIStyle);
@@ -137,28 +139,28 @@ public class Main : MonoBehaviour {
 		}
 		if(displayingHighScores){
 			if (singleUserScores){
-				GUI.Label(new Rect(Screen.width/2-51, Screen.height/10+20, 100, 100), "BEST: " + hsHandler.scores[0], myGUIStyle);
+				GUI.Label(new Rect(Screen.width/2-51, Screen.height/100+20, 100, 100), "BEST: " + hsHandler.scores[0], myGUIStyle);
 			}
 			else{
-			GUI.Label(new Rect(Screen.width/2-51, Screen.height/10+20, 100, 100), "HIGH SCORES", myGUIStyle);
+			GUI.Label(new Rect(Screen.width/2-51, Screen.height/100+20, 100, 100), "HIGH SCORES", myGUIStyle);
 			for(int i = 0; i < hsHandler.scoreboardSize; i++){
 				if (hsHandler.GettingInput){
 				    if (i == hsHandler.newScoreIndex){
-						GUI.Label(new Rect(Screen.width/2-60, Screen.height/10+40+(i*20), 100, 100), (i+1)+": "+hsHandler.nameBuffer+"\t\t", myGUIStyleLeftAlign);
-						GUI.Label(new Rect(Screen.width/2+40, Screen.height/10+40+(i*20), 100, 100), ""+(int)Score, myGUIStyleLeftAlign);
+						GUI.Label(new Rect(Screen.width/2-60, Screen.height/100+40+(i*20), 100, 100), (i+1)+": "+hsHandler.nameBuffer+"\t\t", myGUIStyleLeftAlign);
+						GUI.Label(new Rect(Screen.width/2+40, Screen.height/100+40+(i*20), 100, 100), ""+(int)Score, myGUIStyleLeftAlign);
 					}
 					else if (i > hsHandler.newScoreIndex){
-						GUI.Label(new Rect(Screen.width/2-60, Screen.height/10+40+(i*20), 100, 100), (i+1)+": "+hsHandler.names[i-1], myGUIStyleLeftAlign);
-						GUI.Label(new Rect(Screen.width/2+40, Screen.height/10+40+(i*20), 100, 100), ""+hsHandler.scores[i-1], myGUIStyleLeftAlign);
+						GUI.Label(new Rect(Screen.width/2-60, Screen.height/100+40+(i*20), 100, 100), (i+1)+": "+hsHandler.names[i-1], myGUIStyleLeftAlign);
+						GUI.Label(new Rect(Screen.width/2+40, Screen.height/100+40+(i*20), 100, 100), ""+hsHandler.scores[i-1], myGUIStyleLeftAlign);
 					}
 					else if (i < hsHandler.newScoreIndex){
-						GUI.Label(new Rect(Screen.width/2-60, Screen.height/10+40+(i*20), 100, 100), (i+1)+": "+hsHandler.names[i], myGUIStyleLeftAlign);
-						GUI.Label(new Rect(Screen.width/2+40, Screen.height/10+40+(i*20), 100, 100), ""+hsHandler.scores[i], myGUIStyleLeftAlign);
+						GUI.Label(new Rect(Screen.width/2-60, Screen.height/100+40+(i*20), 100, 100), (i+1)+": "+hsHandler.names[i], myGUIStyleLeftAlign);
+						GUI.Label(new Rect(Screen.width/2+40, Screen.height/100+40+(i*20), 100, 100), ""+hsHandler.scores[i], myGUIStyleLeftAlign);
 					}
 				}
 				else{
-				GUI.Label(new Rect(Screen.width/2-60, Screen.height/10+40 + (i * 20), 100, 100), (i+1)+": "+hsHandler.names[i], myGUIStyleLeftAlign);
-					GUI.Label(new Rect(Screen.width/2+40, Screen.height/10+40 + (i * 20), 100, 100), ""+hsHandler.scores[i], myGUIStyleLeftAlign);
+				GUI.Label(new Rect(Screen.width/2-60, Screen.height/100+40 + (i * 20), 100, 100), (i+1)+": "+hsHandler.names[i], myGUIStyleLeftAlign);
+					GUI.Label(new Rect(Screen.width/2+40, Screen.height/100+40 + (i * 20), 100, 100), ""+hsHandler.scores[i], myGUIStyleLeftAlign);
 				}
 			}
 			}
